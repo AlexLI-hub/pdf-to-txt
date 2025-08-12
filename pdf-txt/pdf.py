@@ -1,6 +1,5 @@
 # coding:utf-8
 import os
-import re
 from pdfminer.converter import LTChar, TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfparser import PDFParser
@@ -31,10 +30,8 @@ def read(path):
         interpreter = PDFPageInterpreter(rsrcmgr, device)
         page0 = ''
         for i, page in enumerate(PDFPage.create_pages(doc)):
-            interpreter.process_page(page)
             print("START PAGE %d\n" % i)
-            if page is not None:
-                interpreter.process_page(page)
+            interpreter.process_page(page)
             print("END PAGE %d\n" % i)
             layout = device.get_result()
             print(layout)
@@ -56,11 +53,11 @@ if __name__ == '__main__':
             content = read(pdffile)
         except:
             continue
-        str = re.sub('.pdf', '.txt', li)
-        file1 = 'txt/' + str
+        txt_filename = os.path.splitext(li)[0] + '.txt'
+        file1 = os.path.join('txt', txt_filename)
         with open(file1, 'w+', encoding='utf8') as f:
             f.write(content)
-        pdf_num = pdf_num + 1
-        print("DONE:" + str)
+        pdf_num += 1
+        print("DONE:" + txt_filename)
     print('number of done-article:', end="")
     print(pdf_num)
